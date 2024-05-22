@@ -2,8 +2,8 @@
 conf_folder='//192.168.100.100/docs/itm/'
 
 dnf install -y mc zsh openssh-server sudo tree chrony bash-completion git tmux curl cifs-utils epel-release   
-dnf insatll -y ntfs-3g dkms gpm gpg firewalld util-linux-user wget vim nano
-dnf insatll -y groupinstall 'Development Tools'
+dnf install -y ntfs-3g dkms gpm gpg firewalld util-linux-user wget vim nano
+dnf install -y groupinstall 'Development Tools'
 
 # Change config's files for useradd and adduser ( no exist in Rocky)
 sed -i \
