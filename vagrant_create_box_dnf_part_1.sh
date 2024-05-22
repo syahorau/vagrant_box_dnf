@@ -59,10 +59,4 @@ hostnamectl set-hostname rocky9
 echo '127.0.0.1 rocky9
 ::1 rocky9' > /etc/hosts
 
-mkdir /virtbox && mount /dev/cdrom /virtbox && \
-sh /virtbox/VBoxLinuxAdditions.run & \
-umount /virtbox & \
-rm -r /virtbox
-
-#sudo dd if=/dev/zero of=/EMPTY bs=1M
-#sudo rm -f /EMPTY
+shutdown -r +0
