@@ -68,7 +68,7 @@ echo '127.0.0.1 rocky9
 ::1 rocky9' > /etc/hosts
 
 # Create task for update omz
-echo "!/bin/zsh
+echo "#!/bin/zsh
 /bin/zsh -i -c 'omz update'
 su siarhei -c \"/bin/zsh -i -c 'omz update'\"" > /bin/update-omz.sh
 chmod +x /bin/update-omz.sh
