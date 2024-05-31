@@ -69,8 +69,8 @@ echo '127.0.0.1 rocky9
 
 # Create task for update omz
 echo "!/bin/zsh
-/bin/zsh -i -c "omz update"
-su siarhei -c \"/bin/zsh -i -c \'omz update\'\"" > /bin/update-omz.sh
+/bin/zsh -i -c 'omz update'
+su siarhei -c \"/bin/zsh -i -c 'omz update'\"" > /bin/update-omz.sh
 chmod +x /bin/update-omz.sh
 
 echo "[Unit]
@@ -92,5 +92,7 @@ Unit=update-omz.service
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/update-omz.timer
 
+systemctl daemon-reload
+systemctl enable update-omz.timer
 # Reboot VM
 shutdown -r +0
