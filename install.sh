@@ -96,13 +96,13 @@ systemctl daemon-reload
 systemctl enable update-omz.timer
 
 # Create the second task
-a=$(find / -name part2.sh)
+a=$(/bin/find / -name part2.sh)
 cp "$a" /root
 chmod +x /etc/rc.d/rc.local
 echo '/root/part2.sh' >> /etc/rc.d/rc.local
 
 #Dell folder with scrs
-a=$(find / -name vagrant_box_rocky9)
+a=$(/bin/find / -name vagrant_box_rocky9)
 rm -rf "$a"
 
 # Reboot VM
