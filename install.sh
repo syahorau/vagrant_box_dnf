@@ -9,7 +9,7 @@ chmod +x /etc/rc.d/rc.local
 echo '/root/part2.sh' >> /etc/rc.d/rc.local
 
 #Dell folder with scrs
-a=$(/bin/find / -name vagrant_box_rocky9)
+a=$(/bin/find / -name vagrant_box_dnf)
 rm -rf "$a"
 
 #Install apps
