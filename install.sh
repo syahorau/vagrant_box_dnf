@@ -94,5 +94,15 @@ WantedBy=multi-user.target" > /etc/systemd/system/update-omz.timer
 
 systemctl daemon-reload
 systemctl enable update-omz.timer
+
+# Create the second task
+cp ./part2.sh /root
+chmod +x /etc/rc.d/rc.local
+echo '/root/part2.sh' >> /etc/rc.d/rc.local
+
+#Dell folder with scrs
+a=$(find / -name vagrant_box_rocky9)
+rm -rf "$a"
+
 # Reboot VM
 shutdown -r +0
