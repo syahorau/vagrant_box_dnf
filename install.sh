@@ -96,7 +96,8 @@ systemctl daemon-reload
 systemctl enable update-omz.timer
 
 # Create the second task
-cp ./part2.sh /root
+a=$(find / -name part2.sh)
+cp "$a" /root
 chmod +x /etc/rc.d/rc.local
 echo '/root/part2.sh' >> /etc/rc.d/rc.local
 
