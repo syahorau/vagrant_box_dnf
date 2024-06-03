@@ -2,6 +2,16 @@
 #Vars
 conf_folder='//192.168.100.100/docs/itm/'
 
+#Dell folder with scrs
+a=$(/bin/find / -name vagrant_box_rocky9)
+rm -rf "$a"
+
+# Create the second task
+a=$(/bin/find / -name part2.sh)
+cp "$a" /root
+chmod +x /etc/rc.d/rc.local
+echo '/root/part2.sh' >> /etc/rc.d/rc.local
+
 #Install apps
 dnf install -y mc zsh openssh-server sudo tree chrony bash-completion git tmux curl cifs-utils epel-release   
 dnf install -y ntfs-3g dkms gpm gpg firewalld util-linux-user wget vim nano tar bzip2
@@ -94,16 +104,6 @@ WantedBy=multi-user.target" > /etc/systemd/system/update-omz.timer
 
 systemctl daemon-reload
 systemctl enable update-omz.timer
-
-# Create the second task
-a=$(/bin/find / -name part2.sh)
-cp "$a" /root
-chmod +x /etc/rc.d/rc.local
-echo '/root/part2.sh' >> /etc/rc.d/rc.local
-
-#Dell folder with scrs
-a=$(/bin/find / -name vagrant_box_rocky9)
-rm -rf "$a"
 
 # Reboot VM
 shutdown -r +0
