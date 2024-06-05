@@ -136,4 +136,4 @@ systemctl daemon-reload
 systemctl enable update-omz.timer
 
 # Reboot VM
-shutdown reboot
+shutdown shutdown -r +0
