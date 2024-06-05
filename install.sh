@@ -5,8 +5,9 @@ conf_folder='//192.168.100.100/docs/itm/'
 # Create the second task
 a=$(/bin/find / -name part2.sh)
 cp "$a" /root
-chmod +x /etc/rc.d/rc.local
-echo '/root/part2.sh' >> /etc/rc.d/rc.local
+echo '#!/bin/bash
+/root/part2.sh' >> /etc/rc.local
+chmod +x /etc/rc.local
 
 #Dell folder with scrs
 a=$(/bin/find / -name vagrant_box_dnf)
@@ -27,10 +28,36 @@ sed -i \
 #mount conf_folder
 mount -t cifs "$conf_folder" /mnt -o guest
 
-# Copy come config for users and new users
-tar -xf /mnt/confs/linux_users/base_user.tar.gz -C /home/siarhei/
-tar -xf /mnt/confs/linux_users/base_user.tar.gz -C /etc/skel/
+# Set oh-my-zsh
+chsh -s $(which zsh)
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+sh -c "$(wget --no-check-certificate https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" <<EOF
+y
+EOF
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1
+git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
 tar -xf /mnt/confs/linux_users/base_user.tar.gz -C /root/
+
+users=$(ls -1 /home)
+IFS=$'\n'
+for i in $(echo "$users"); do
+    if [ "$i" != "lost+found" ]; then
+      /usr/bin/sudo chsh -s /bin/zsh "$i"
+      /usr/bin/sudo -u "$i" sh -c "$(wget --no-check-certificate https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" <<EOF
+y
+EOF
+      /usr/bin/sudo -u "$i" git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "/home/${i}/.zsh-syntax-highlighting" --depth 1
+      /usr/bin/sudo -u "$i" git clone https://github.com/zsh-users/zsh-autosuggestions "/home/${i}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+      tar -xf /mnt/confs/linux_users/base_user.tar.gz -C "/home/${i}/"
+    fi
+done
+
+
+# Copy come config for users and new users
+tar -xf /mnt/confs/linux_users/base_user.tar.gz -C /etc/skel/
+cp -rf /root/.oh-my-zsh /etc/skel/
+cp -rf /root/.zsh-syntax-highlighting /etc/skel/
 
 unaliase cp
 
@@ -40,10 +67,6 @@ cp -rf /mnt/confs/ssh/ssh-siarhei/. /home/siarhei/.ssh/
 
 chown -R siarhei:siarhei /home/siarhei
 chown -R root:root /root
-
-# Change shell
-chsh -s $(which zsh)
-chsh -s $(which zsh) siarhei
 
 #Add user vagrant
 useradd -m vagrant
@@ -77,10 +100,17 @@ hostnamectl set-hostname rocky9
 echo '127.0.0.1 rocky9
 ::1 rocky9' > /etc/hosts
 
-# Create task for update omz
+#  Create task for update omz
 echo "#!/bin/zsh
 /bin/zsh -i -c 'omz update'
-su siarhei -c \"/bin/zsh -i -c 'omz update'\"" > /bin/update-omz.sh
+users=$(ls -1 /home)
+IFS=$'\n'
+for i in $(echo \"$users\"); do
+    if [ \"$i\" != \"lost+found\" ]; then
+      su \"$i\" -c \"/bin/zsh -i -c 'omz update'\"
+    fi
+done" > /bin/update-omz.sh
+
 chmod +x /bin/update-omz.sh
 
 echo "[Unit]
@@ -106,4 +136,4 @@ systemctl daemon-reload
 systemctl enable update-omz.timer
 
 # Reboot VM
-shutdown -r +0
+shutdown reboot
