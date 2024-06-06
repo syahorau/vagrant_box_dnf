@@ -1,6 +1,7 @@
 #!/bin/bash
 #Vars
 conf_folder='//192.168.100.100/docs/itm/'
+read -p "enter hostname: " vm_name
 
 # Create the second task
 a=$(/bin/find / -name part2.sh)
@@ -90,15 +91,20 @@ chown -R vagrant /home/vagrant/.ssh
 # Set firewalld
 firewall-cmd --permanent --new-zone=my-zone
 firewall-cmd --reload
-firewall-cmd --permanent --zone=my-zone --add-service={ssh,dhcp,dns}
+firewall-cmd --permanent --zone=my-zone --add-service=ssh
+firewall-cmd --permanent --zone=my-zone --add-service=dhcp
+firewall-cmd --permanent --zone=my-zone --add-service=dns
 firewall-cmd --permanent --zone=my-zone --add-interface=enp0s8
 firewall-cmd --permanent --zone=my-zone --add-icmp-block-inversion
-firewall-cmd --permanent --zone=my-zone --add-icmp-block={echo-reply,echo-request,destination-unreachable,time-exceeded}
+firewall-cmd --permanent --zone=my-zone --add-icmp-block=echo-request
+firewall-cmd --permanent --zone=my-zone --add-icmp-block=echo-reply
+firewall-cmd --permanent --zone=my-zone --add-icmp-block=destination-unreachable
+firewall-cmd --permanent --zone=my-zone --add-icmp-block=time-exceeded
 
 # Set hostname 
-hostnamectl set-hostname rocky9
-echo '127.0.0.1 rocky9
-::1 rocky9' > /etc/hosts
+hostnamectl set-hostname "$vm_name"
+echo "127.0.0.1 $vm_name
+::1 $vm_name" > /etc/hosts
 
 #  Create task for update omz
 echo "#!/bin/zsh
