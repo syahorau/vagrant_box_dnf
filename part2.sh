@@ -7,9 +7,9 @@ sleep 10s
 umount /mnt
 sleep 10s
 if [ -f "/etc/rc.d/rc.local" ]; then
-  sed -i '/part2/part3/g' /etc/rc.d/rc.local
+  sed -i 's/part2/part3/g' /etc/rc.d/rc.local
 else 
-  sed -i '/part2/part3/g' /etc/rc.local
+  sed -i 's/part2/part3/g' /etc/rc.local
 fi
 rm -rf ./VBoxGuestAdditions_7.0.18.iso 
 rm -rf /root/part2.sh
