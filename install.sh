@@ -8,9 +8,19 @@ a=$(/bin/find / -name part2.sh)
 cp "$a" /root
 a=$(/bin/find / -name part3.sh)
 cp "$a" /root
+
+if [ -f "/etc/rc.d/rc.local" ]; then
+  a="/etc/rc.d/rc.local"
+  echo '/root/part2.sh' >> "$a"
+else 
+  a="/etc/rc.local"
+  echo '#!/bin/bash
+/root/part2.sh' >> "$a"
+fi
+
 echo '#!/bin/bash
-/root/part2.sh' >> /etc/rc.local
-chmod +x /etc/rc.local
+/root/part2.sh' >> "$a"
+chmod +x "$a"
 
 #Dell folder with scrs
 a=$(/bin/find / -name vagrant_box_dnf)

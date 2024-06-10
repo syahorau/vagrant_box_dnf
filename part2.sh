@@ -6,14 +6,11 @@ sh /mnt/VBoxLinuxAdditions.run
 sleep 10s
 umount /mnt
 sleep 10s
+if [ -f "/etc/rc.d/rc.local" ]; then
+  sed -i '/part2/part3/g' /etc/rc.d/rc.local
+else 
+  sed -i '/part2/part3/g' /etc/rc.local
+fi
 rm -rf ./VBoxGuestAdditions_7.0.18.iso 
-rm -rf /etc/rc.local
-rm -rf /etc/rc.d/rc.local
-rm -ff /root/part2.sh
-echo '#!/bin/bash
-/root/part3.sh' >> /etc/rc.local
-chmod +x /etc/rc.local
-echo '#!/bin/bash
-/root/part3.sh' >> /etc/rc.d/rc.local
-chmod +x /etc/rc.d/rc.local
+rm -rf /root/part2.sh
 shutdown -r +0
