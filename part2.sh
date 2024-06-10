@@ -13,4 +13,7 @@ rm -ff /root/part2.sh
 echo '#!/bin/bash
 /root/part3.sh' >> /etc/rc.local
 chmod +x /etc/rc.local
+echo '#!/bin/bash
+/root/part3.sh' >> /etc/rc.d/rc.local
+chmod +x /etc/rc.d/rc.local
 shutdown -r +0
