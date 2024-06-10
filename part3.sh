@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ -f "/etc/rc.d/rc.local" ]; then
-  sed -i '/\/root\/part2\.sh/d' /etc/rc.d/rc.local
+  sed -i '/\/root\/part3\.sh/d' /etc/rc.d/rc.local
   chmod -x /etc/rc.d/rc.local
 else 
   rm -rf /etc/rc.local
