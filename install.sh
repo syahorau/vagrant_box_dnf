@@ -6,6 +6,8 @@ read -p "enter hostname: " vm_name
 # Create the second task
 a=$(/bin/find / -name part2.sh)
 cp "$a" /root
+a=$(/bin/find / -name part3.sh)
+cp "$a" /root
 echo '#!/bin/bash
 /root/part2.sh' >> /etc/rc.local
 chmod +x /etc/rc.local
