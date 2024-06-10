@@ -18,10 +18,6 @@ else
 /root/part2.sh' >> "$a"
 fi
 
-echo '#!/bin/bash
-/root/part2.sh' >> "$a"
-chmod +x "$a"
-
 #Dell folder with scrs
 a=$(/bin/find / -name vagrant_box_dnf)
 rm -rf "$a"
